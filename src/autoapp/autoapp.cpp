@@ -68,6 +68,15 @@ void startIOServiceWorkers(boost::asio::io_service& ioService, ThreadPool& threa
     threadPool.emplace_back(ioServiceWorker);
 }
 
+void init_log()
+{
+    logging::add_file_log("~/Documents/autoapp_log");
+    logging::core::get()->set_filter
+    {
+        logging::trivial::severity >= logging::trivial:info
+    };
+}
+
 int main(int argc, char* argv[])
 {
     libusb_context* usbContext;
