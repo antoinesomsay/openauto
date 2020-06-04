@@ -73,7 +73,7 @@ void init_log()
     boost::log::add_file_log("~/Documents/autoapp_log");
     boost::log::core::get()->set_filter
     (
-        logging::trivial::severity >= logging::trivial:info
+        boost::log::trivial::severity >= boost::log::trivial:info
     );
 }
 
