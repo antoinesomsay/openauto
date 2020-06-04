@@ -79,6 +79,7 @@ void init_log()
 
 int main(int argc, char* argv[])
 {
+    init_log();
     libusb_context* usbContext;
     if(libusb_init(&usbContext) != 0)
     {
