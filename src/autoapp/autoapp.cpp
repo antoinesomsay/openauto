@@ -35,7 +35,11 @@
 #include <f1x/openauto/autoapp/UI/SettingsWindow.hpp>
 #include <f1x/openauto/autoapp/UI/ConnectDialog.hpp>
 #include <f1x/openauto/Common/Log.hpp>
+<<<<<<< HEAD
 //#include <syslog.h>
+=======
+#include <syslog.h>
+>>>>>>> c53d98bc5fa283dcb950f9092a1fa81774c83e33
 
 
 namespace aasdk = f1x::aasdk;
