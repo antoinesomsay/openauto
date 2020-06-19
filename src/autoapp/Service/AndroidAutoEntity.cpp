@@ -229,6 +229,7 @@ void AndroidAutoEntity::onNavigationFocusRequest(const aasdk::proto::messages::N
 
 void AndroidAutoEntity::onPingResponse(const aasdk::proto::messages::PingResponse&)
 {
+    OPENAUTO_LOG(error) << "[AndroidAutoEntity] onPingResponse";
     pinger_->pong();
     controlServiceChannel_->receive(this->shared_from_this());
 }

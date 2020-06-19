@@ -16,6 +16,7 @@
 *  along with openauto. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#define BOOST_LOG_USE_NATIVE_SYSLOG
 #include <thread>
 #include <QApplication>
 #include <f1x/aasdk/USB/USBHub.hpp>
@@ -34,10 +35,16 @@
 #include <f1x/openauto/autoapp/UI/SettingsWindow.hpp>
 #include <f1x/openauto/autoapp/UI/ConnectDialog.hpp>
 #include <f1x/openauto/Common/Log.hpp>
+//#include <syslog.h>
+
 
 namespace aasdk = f1x::aasdk;
 namespace autoapp = f1x::openauto::autoapp;
+namespace sinks = boost::log::sinks;
+namespace keywords = boost::log::keywords;
 using ThreadPool = std::vector<std::thread>;
+
+typedef sinks::synchronous_sink<sinks::syslog_backend> sink_t;
 
 void startUSBWorkers(boost::asio::io_service& ioService, libusb_context* usbContext, ThreadPool& threadPool)
 {
@@ -68,18 +75,33 @@ void startIOServiceWorkers(boost::asio::io_service& ioService, ThreadPool& threa
     threadPool.emplace_back(ioServiceWorker);
 }
 
-void init_log()
+void init_file_log(char* file_name)
 {
-    boost::log::add_file_log("~/Documents/autoapp_log");
+    boost::log::add_file_log(file_name);
     boost::log::core::get()->set_filter
     (
-        boost::log::trivial::severity >= boost::log::trivial:info
+        boost::log::trivial::severity >= boost::log::trivial::trace
     );
+}
+
+void init_native_syslog()
+{
+    boost::shared_ptr<boost::log::core> core = boost::log::core::get();
+    boost::shared_ptr<sinks::syslog_backend> backend(new sinks::syslog_backend(
+	keywords::facility = sinks::syslog::user,
+	keywords::use_impl = sinks::syslog::native
+    ));
+
+    backend->set_severity_mapper(sinks::syslog::direct_severity_mapping<int>("Severity"));
+    core->add_sink(boost::make_shared<sink_t>(backend));
 }
 
 int main(int argc, char* argv[])
 {
-    init_log();
+    if (argc > 1)
+    	init_file_log(argv[1]);
+    else
+    	init_native_syslog();
     libusb_context* usbContext;
     if(libusb_init(&usbContext) != 0)
     {
