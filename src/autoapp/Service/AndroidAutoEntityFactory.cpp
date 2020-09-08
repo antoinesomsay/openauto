@@ -62,7 +62,7 @@ IAndroidAutoEntity::Pointer AndroidAutoEntityFactory::create(aasdk::tcp::ITCPEnd
 IAndroidAutoEntity::Pointer AndroidAutoEntityFactory::create(aasdk::transport::ITransport::Pointer transport)
 {
     auto sslWrapper(std::make_shared<aasdk::transport::SSLWrapper>());
-    auto cryptor(std::make_shared<aasdk::messenger::Cryptor>(std::move(sslWrapper)), 0);
+    auto cryptor(std::make_shared<aasdk::messenger::Cryptor>(std::move(sslWrapper), 0));
     cryptor->init();
 
     auto messenger(std::make_shared<aasdk::messenger::Messenger>(ioService_,

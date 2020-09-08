@@ -96,24 +96,24 @@ void AndroidAutoEntity::onVersionResponse(uint16_t majorCode, uint16_t minorCode
     }
     else
     {
-        OPENAUTO_LOG(info) << "[AndroidAutoEntity] Begin handshake.";
-        //OPENAUTO_LOG(info) << "[AndroidAutoEntity] Auth completed.";
+//	OPENAUTO_LOG(info) << "[AndroidAutoEntity] Begin handshake.";
+        OPENAUTO_LOG(info) << "[AndroidAutoEntity] Auth completed.";
         try
         {
-            cryptor_->doHandshake();
+/*            cryptor_->doHandshake();
 
             auto handshakePromise = aasdk::channel::SendPromise::defer(strand_);
             handshakePromise->then([]() {}, std::bind(&AndroidAutoEntity::onChannelError, this->shared_from_this(), std::placeholders::_1));
             controlServiceChannel_->sendHandshake(cryptor_->readHandshakeBuffer(), std::move(handshakePromise));
             controlServiceChannel_->receive(this->shared_from_this());
-           /*aasdk::proto::messages::AuthCompleteIndication authCompleteIndication;
+*/          aasdk::proto::messages::AuthCompleteIndication authCompleteIndication;
             authCompleteIndication.set_status(aasdk::proto::enums::Status::OK);
 
             auto authCompletePromise = aasdk::channel::SendPromise::defer(strand_);
             authCompletePromise->then([]() {}, std::bind(&AndroidAutoEntity::onChannelError, this->shared_from_this(), std::placeholders::_1));
             controlServiceChannel_->sendAuthComplete(authCompleteIndication, std::move(authCompletePromise));
             controlServiceChannel_->receive(this->shared_from_this());
-       */}
+       }
         catch(const aasdk::error::Error& e)
         {
             this->onChannelError(e);
